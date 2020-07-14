@@ -1,8 +1,13 @@
 <?php
 
+require_once('classes/webinar.php');
+require_once('params.php');
+
+use classes\webinar;
+
 require_once('../../config.php');
 
-if(!isloggedin() or isguestuser()){
+if (!isloggedin() or isguestuser()) {
     require_login();
     die;
 }
@@ -20,6 +25,7 @@ $PAGE->set_cacheable(false);
 //$PAGE->requires->css('/local/webinars/styles.css');
 echo $OUTPUT->header();
 
-echo 'dasd';
+$webinars = webinar::getInstance($params['sql']);
+$webinars->getLinks();
 
 echo $OUTPUT->footer();
