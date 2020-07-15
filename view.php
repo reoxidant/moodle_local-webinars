@@ -12,20 +12,24 @@ if (!isloggedin() or isguestuser()) {
     die;
 }
 
-$context_sys = context_system::instance();
+$context_sys = context_system ::instance();
 
-$PAGE->set_url("$CFG->httpswwwroot/local/webinars/view.php");
-$PAGE->set_context($context_sys);
-$PAGE->set_pagelayout('standart');
+$PAGE -> set_url("$CFG->httpswwwroot/local/webinars/view.php");
+$PAGE -> set_context($context_sys);
+$PAGE -> set_pagelayout('standart');
 $title = get_string('pluginname', 'local_webinars');
-$PAGE->navbar->add($title);
-$PAGE->set_heading($title);
-$PAGE->set_title($title);
-$PAGE->set_cacheable(false);
+$PAGE -> navbar -> add($title);
+$PAGE -> set_heading($title);
+$PAGE -> set_title($title);
+$PAGE -> set_cacheable(false);
 //$PAGE->requires->css('/local/webinars/styles.css');
-echo $OUTPUT->header();
+echo $OUTPUT -> header();
 
-$webinars = webinar::getInstance($params['sql']);
-$webinars->getLinks();
+$webinars = webinar ::getInstance($params['sql'], [$USER -> id]);
+$content = $webinars -> getLinks();
 
-echo $OUTPUT->footer();
+echo '<pre>';
+print_r($content);
+echo '</pre>';
+
+echo $OUTPUT -> footer();

@@ -3,21 +3,19 @@
 $params = [
     'sql' => "
         SELECT 
-        course_mods.course as course_id,
-        course_mods.instance as course_insance,
-        mdl_modules.name as modules_name,
-        mdl_modules.visible as modules_visible,
-        mdl_url.course as url_course_id,
-        mdl_url.name as url_name,
-        mdl_url.parameters as ulr_param,
+        urls.id,
+        course.id as course_id,
         course.fullname as course_name,
-        enrol.courseid as enrol_course_id,
-        user_enrol.status as status_course
-        FROM mdl_course_modules as course_mods
-        JOIN mdl_modules ON course_mods.course = mdl_modules.id
-        JOIN mdl_url ON course_mods.instance = mdl_url.id
-        JOIN mdl_course as course ON course_mods.course = course.id
-        JOIN mdl_enrol as enrol ON course_mods.course = enrol.courseid
-        JOIN mdl_user_enrolments as user_enrol ON enrol.id = user_enrol.enrolid WHERE enrol.enrol = 'manual'
+        urls.name as topic_name,
+        urls.parameters as ulr_param,
+        urls.externalurl as src_url,
+        user_enrols.userid as userid,
+        user_enrols.status as status
+        FROM mdl_user_enrolments as user_enrols
+        JOIN mdl_enrol ON user_enrols.enrolid = mdl_enrol.id AND mdl_enrol.enrol = 'manual'
+        JOIN mdl_course as course ON mdl_enrol.courseid = course.id
+        JOIN mdl_course_modules as course_mods ON course.id = course_mods.course
+        JOIN mdl_modules as mods ON course_mods.module = mods.id AND mods.name = 'url'
+        JOIN mdl_url as urls ON course_mods.instance = urls.id WHERE user_enrols.userid = ?
     "
 ];
