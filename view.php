@@ -26,10 +26,7 @@ $PAGE -> set_cacheable(false);
 echo $OUTPUT -> header();
 
 $webinars = webinar ::getInstance($params['sql'], [$USER -> id]);
-$content = $webinars -> getLinks();
 
-echo '<pre>';
-print_r($content);
-echo '</pre>';
+echo $webinars -> getHtmlContent();
 
 echo $OUTPUT -> footer();
