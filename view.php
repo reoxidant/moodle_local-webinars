@@ -26,7 +26,7 @@ $PAGE -> requires -> css('/local/webinars/styles.css');
 echo $OUTPUT -> header();
 
 if (!has_capability('local/webinars:view', $context_sys)) {
-    \core\notification ::warning(get_string('noaccess', 'local_timetable'));
+    \core\notification ::warning(get_string('noaccess', 'local_webinars'));
     echo $OUTPUT -> footer();
     die;
 }
