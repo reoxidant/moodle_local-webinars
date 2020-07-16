@@ -31,10 +31,6 @@ if (!has_capability('local/webinars:view', $context_sys)) {
     die;
 }
 
-
-\core\notification ::warning(get_string('norecods', 'local_webinars'));
-
-
 $webinars = webinar ::getInstance($params['sql'], [$USER -> id]);
 
 echo $webinars -> getHtml();
