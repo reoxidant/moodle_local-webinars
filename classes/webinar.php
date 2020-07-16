@@ -2,6 +2,8 @@
 
 namespace classes;
 
+use moodle_url;
+
 /**
  * Class webinar
  * @package classes
@@ -93,17 +95,53 @@ class webinar
         return $this -> moodle_database -> get_records_sql($this -> sqlText, $this -> sqlParam);
     }
 
+    private function getHtmlCourse($course, $key) : string
+    {
+        return
+        \html_writer ::start_tag('h3')
+        .
+        \html_writer ::start_tag('span')
+        .
+        \html_writer ::start_tag('a', array('href' => new moodle_url('/course/view.php', ['id' => $key]))). $course[$key][0]['course_name'] .\html_writer ::end_tag('a')
+        .
+        \html_writer ::end_tag('span')
+        .
+        \html_writer ::end_tag('h3');
+    }
+
+    private function getNavTopicList($course_data) : string
+    {
+        $content = \html_writer ::start_tag('ul', array('class' => "nav_topic-list"));
+        foreach ($course_data as $key => $topic) {
+            $this->getHtmlTopic();
+        }
+        $content .= \html_writer::end_tag('ul');
+        return $content;
+    }
+
+    private function getHtmlTopic() : string
+    {
+        return
+            \html_writer ::start_tag('li');
+            \html_writer ::start_tag('img', array('class' => 'iconlarge activityicon'));
+            \html_writer ::start_tag('a', array('class' => "topic_link", 'href' => new moodle_url('/mod/url/view.php', ['id'=> $topic['id']])))
+            .
+            $topic['topic_name']
+            .
+            \html_writer ::end_tag('a');
+            \html_writer ::end_tag('li');
+    }
+
     /**
      * @return string HTML content
      */
-    private function getContent(): string
+    private function getHtmlContent(): string
     {
         $content = \html_writer ::start_tag('div', array('class' => 'module_content'));
+
         foreach ($this -> data as $key => $course) {
-            $content .= \html_writer ::start_tag('h4') . $this -> data[$key][0]['course_name'] . \html_writer ::end_tag('h4');
-            foreach ($course as $topic) {
-                $content .= \html_writer ::start_tag('a', array('class' => "webinar_link")) . $topic['topic_name'] . \html_writer ::end_tag('a');
-            }
+            $content .= $this -> getHtmlCourse($course, $key);
+            $content .= $this -> getNavTopicList($course);
         }
         $content .= \html_writer ::end_tag('div');
         return $content;
@@ -112,12 +150,31 @@ class webinar
     /**
      * @return string HTML content
      */
-    public function getHtmlContent(): string
+    private function getHtmlStatus() : string
     {
-        return \html_writer ::start_tag('h4', array('class' => 'module_title')) . "Каталог вебинаров" . \html_writer ::end_tag('h4') .
-            $this -> getContent();
-        \html_writer ::start_tag('div', array('class' => 'module_status')) . "
-                StatusContent
-                " . \html_writer ::end_tag('div');
+        return \html_writer ::start_tag('div', array('class' => 'module_status')) .
+                "status content".
+                \html_writer ::end_tag('div');
+    }
+
+    /**
+     * @return string HTML content
+     */
+    private function getHtmlTitle() : string
+    {
+        return \html_writer ::start_tag('h2', array('class' => 'module_title')) .
+                "Каталог вебинаров" .
+               \html_writer ::end_tag('h2');
+    }
+
+    /**
+     * @return string HTML content
+     */
+    public function getHtml(): string
+    {
+        return
+            $this -> getHtmlTitle() .
+            $this -> getHtmlContent() .
+            $this -> getHtmlStatus();
     }
 }

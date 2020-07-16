@@ -27,6 +27,6 @@ echo $OUTPUT -> header();
 
 $webinars = webinar ::getInstance($params['sql'], [$USER -> id]);
 
-echo $webinars -> getHtmlContent();
+echo $webinars -> getHtml();
 
 echo $OUTPUT -> footer();
