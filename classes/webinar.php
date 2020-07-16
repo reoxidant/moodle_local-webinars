@@ -93,10 +93,12 @@ class webinar
      */
     private function getDatabaseResult(): array
     {
-        try {
-            return $this -> moodle_database -> get_records_sql($this -> sqlText, $this -> sqlParam);
-        } catch (\dml_exception $e) {
+        $sql_result = $this -> moodle_database -> get_records_sql($this -> sqlText, $this -> sqlParam);
+        if (count($sql_result) == 0) {
             \core\notification ::warning(get_string('norecods', 'local_webinars'));
+            return [];
+        } else {
+            return $sql_result;
         }
     }
 
