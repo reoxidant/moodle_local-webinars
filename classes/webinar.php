@@ -76,6 +76,7 @@ class webinar
 
     /**
      * setData $array Database
+     * @throws \dml_exception
      */
     private function setDataFromDatabase(): void
     {
@@ -92,7 +93,13 @@ class webinar
      */
     private function getDatabaseResult(): array
     {
-        return $this -> moodle_database -> get_records_sql($this -> sqlText, $this -> sqlParam);
+        $sql_result = $this -> moodle_database -> get_records_sql($this -> sqlText, $this -> sqlParam);
+        if (count($sql_result) == 0) {
+            \core\notification ::warning(get_string('norecods', 'local_webinars'));
+            return [];
+        } else {
+            return $sql_result;
+        }
     }
 
     /**
