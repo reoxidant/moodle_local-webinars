@@ -135,7 +135,7 @@ class webinar
     {
         return
             \html_writer ::start_tag('li', array('class' => 'activity')) .
-            \html_writer ::start_tag('a', array('class' => "topic_link", 'href' => new moodle_url('/mod/url/view.php', ['id' => $topic['id']]))) .
+            \html_writer ::start_tag('a', array('class' => "topic_link", 'href' => $topic['src_url'], 'target' => '_blank')) .
             \html_writer ::start_tag('img', array('class' => 'iconlarge activityicon', 'src' => new moodle_url('/theme/image.php/boost/url/1594822249/icon'))) .
             \html_writer ::start_tag('span') .
             $topic['topic_name'] .
